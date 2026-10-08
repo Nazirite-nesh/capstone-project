@@ -1,0 +1,298 @@
+{
+  "info": {
+    "name": "Employee Leave Management API",
+    "description": "Backend API for the Employee Leave Management capstone project.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "https://employee-leave-management-oty9.onrender.com/" },
+    { "key": "token", "value": "" },
+    { "key": "userId", "value": "" },
+    { "key": "leaveTypeId", "value": "" },
+    { "key": "leaveRequestId", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Jane Employee\",\n  \"email\": \"jane@test.com\",\n  \"password\": \"test1234\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/auth/register", "host": ["{{baseUrl}}"], "path": ["auth", "register"] }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "  const data = pm.response.json().data;",
+                  "  pm.collectionVariables.set('token', data.token);",
+                  "  pm.collectionVariables.set('userId', data.user.id);",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"jane@test.com\",\n  \"password\": \"test1234\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/auth/login", "host": ["{{baseUrl}}"], "path": ["auth", "login"] }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "  const data = pm.response.json().data;",
+                  "  pm.collectionVariables.set('token', data.token);",
+                  "  pm.collectionVariables.set('userId', data.user.id);",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get current user (me)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/auth/me", "host": ["{{baseUrl}}"], "path": ["auth", "me"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Leave Types",
+      "item": [
+        {
+          "name": "Get all leave types",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/leave-types", "host": ["{{baseUrl}}"], "path": ["leave-types"] }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "  const list = pm.response.json().data;",
+                  "  if (list && list.length > 0) {",
+                  "    pm.collectionVariables.set('leaveTypeId', list[0]._id);",
+                  "  }",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Create leave type (admin)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Maternity Leave\",\n  \"defaultDaysAllowed\": 90,\n  \"description\": \"Paid maternity leave\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/leave-types", "host": ["{{baseUrl}}"], "path": ["leave-types"] }
+          }
+        },
+        {
+          "name": "Update leave type (admin)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"defaultDaysAllowed\": 20\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/leave-types/{{leaveTypeId}}", "host": ["{{baseUrl}}"], "path": ["leave-types", "{{leaveTypeId}}"] }
+          }
+        },
+        {
+          "name": "Delete leave type (admin)",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/leave-types/{{leaveTypeId}}", "host": ["{{baseUrl}}"], "path": ["leave-types", "{{leaveTypeId}}"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Leave Requests (Employee)",
+      "item": [
+        {
+          "name": "Submit leave request",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"leaveType\": \"{{leaveTypeId}}\",\n  \"startDate\": \"2026-11-05\",\n  \"endDate\": \"2026-11-07\",\n  \"reason\": \"Family trip\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/leave-requests", "host": ["{{baseUrl}}"], "path": ["leave-requests"] }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "  const data = pm.response.json().data;",
+                  "  pm.collectionVariables.set('leaveRequestId', data._id);",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get my leave requests",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": {
+              "raw": "{{baseUrl}}/leave-requests/me?status=pending&page=1&limit=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["leave-requests", "me"],
+              "query": [
+                { "key": "status", "value": "pending" },
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "10" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Cancel leave request",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/leave-requests/{{leaveRequestId}}", "host": ["{{baseUrl}}"], "path": ["leave-requests", "{{leaveRequestId}}"] }
+          }
+        },
+        {
+          "name": "Get my leave balance",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/leave-balance/me", "host": ["{{baseUrl}}"], "path": ["leave-balance", "me"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Manager",
+      "item": [
+        {
+          "name": "Get team leave requests",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": {
+              "raw": "{{baseUrl}}/manager/leave-requests?status=pending",
+              "host": ["{{baseUrl}}"],
+              "path": ["manager", "leave-requests"],
+              "query": [{ "key": "status", "value": "pending" }]
+            }
+          }
+        },
+        {
+          "name": "Approve leave request",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": {
+              "raw": "{{baseUrl}}/manager/leave-requests/{{leaveRequestId}}/approve",
+              "host": ["{{baseUrl}}"],
+              "path": ["manager", "leave-requests", "{{leaveRequestId}}", "approve"]
+            }
+          }
+        },
+        {
+          "name": "Reject leave request",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": {
+              "raw": "{{baseUrl}}/manager/leave-requests/{{leaveRequestId}}/reject",
+              "host": ["{{baseUrl}}"],
+              "path": ["manager", "leave-requests", "{{leaveRequestId}}", "reject"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Admin",
+      "item": [
+        {
+          "name": "Get all users",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/admin/users", "host": ["{{baseUrl}}"], "path": ["admin", "users"] }
+          }
+        },
+        {
+          "name": "Assign manager to user",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"managerId\": \"PASTE_MANAGER_USER_ID\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/admin/users/{{userId}}/assign-manager", "host": ["{{baseUrl}}"], "path": ["admin", "users", "{{userId}}", "assign-manager"] }
+          }
+        },
+        {
+          "name": "Update user role",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"role\": \"manager\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/admin/users/{{userId}}/role", "host": ["{{baseUrl}}"], "path": ["admin", "users", "{{userId}}", "role"] }
+          }
+        }
+      ]
+    }
+  ]
+}

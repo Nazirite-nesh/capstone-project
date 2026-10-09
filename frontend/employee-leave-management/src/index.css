@@ -1,0 +1,45 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: 'Figtree', system-ui, sans-serif;
+
+  --color-bg: #F9FAFB;
+  --color-surface: #FFFFFF;
+  --color-ink: #111827;
+  --color-muted: #6B7280;
+  --color-line: #E5E7EB;
+
+  --color-accent: #2563EB;
+  --color-accentSoft: #E8EEFC;
+  --color-accent-soft: #E8EEFC;
+  --color-accentInk: #2347B8;
+  --color-accent-ink: #2347B8;
+
+  --color-avatar: #9B51C8;
+
+  --color-ok: #13663A;
+  --color-okBg: #D9F2E3;
+  --color-ok-bg: #D9F2E3;
+
+  --color-no: #9B1C1C;
+  --color-noBg: #FBDDDD;
+  --color-no-bg: #FBDDDD;
+
+  --color-pend: #8A5B00;
+  --color-pendBg: #FFF1CC;
+  --color-pend-bg: #FFF1CC;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--color-bg);
+  color: var(--color-ink);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+button, a, input, select, textarea {
+  transition-property: color, background-color, border-color, box-shadow, opacity;
+  transition-duration: 150ms;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}

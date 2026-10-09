@@ -4,7 +4,7 @@ const BASE_URL =
   import.meta.env.VITE_API_URL ||
   (import.meta.env.DEV
     ? 'http://localhost:5000/api'
-    : 'https://employee-leave-management-oty9.onrender.com/api')
+    : 'https://capstone-project-y3mf.onrender.com/api')
 
 const api = axios.create({
   baseURL: BASE_URL,
@@ -45,7 +45,6 @@ api.interceptors.response.use(
   }
 )
 
-// Turns any error into a message that is safe to show to the user
 export const getErrorMessage = (err: unknown): string => {
   if (axios.isAxiosError(err)) {
     if (err.code === 'ECONNABORTED') {
@@ -57,6 +56,7 @@ export const getErrorMessage = (err: unknown): string => {
     }
 
     const message = err.response.data?.message
+
     if (typeof message === 'string' && message) {
       return message
     }

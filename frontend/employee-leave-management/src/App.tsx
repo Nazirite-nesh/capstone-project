@@ -4,9 +4,9 @@ import Login from './pages/login';
 import Signup from './pages/signup';
 import Layout from './components/layout';
 import ProtectedRoutes from './routes/ProtectedRoutes';
-// import EmployeeDashboard from './pages/employee/employee-dashboard';
-// import ApplyLeave from './pages/employee/apply-leave';
-// import History from './pages/employee/history';
+import EmployeeDashboard from './pages/employee/employee-dashboard';
+import ApplyLeave from './pages/employee/apply-leave';
+import History from './pages/employee/history';
 import TeamOverview from './pages/manager/team-overview';
 import Approvals from './pages/manager/approvals';
 import TeamCalendar from './pages/manager/team-calender';
@@ -24,9 +24,9 @@ function App() {
         <Route path="/signup" element={<Signup />} />
         <Route element={<Layout />}>
           <Route element={<ProtectedRoutes allowed={['employee', 'manager', 'admin']} />}>
-            {/* <Route path="/dashboard" element={<EmployeeDashboard />} />
+            <Route path="/dashboard" element={<EmployeeDashboard />} />
             <Route path="/apply" element={<ApplyLeave />} />
-            <Route path="/history" element={<History />} /> */}
+            <Route path="/history" element={<History />} />
           </Route>
           <Route element={<ProtectedRoutes allowed={['manager']} />}>
             <Route path="/team" element={<TeamOverview />} />

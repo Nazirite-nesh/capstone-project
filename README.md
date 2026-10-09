@@ -244,8 +244,8 @@ git push origin feature/your-task
 
 | Name | Role |
 |---|---|
-| [Name] | [Team leader, backend, docs] |
-| [Name] | [Role] |
-| [Name] | [Role] |
-| [Name] | [Role] |
-| [Name] | [Role] |
+| [Keith ] | [Team leader, backend, docs] |
+| [Bello Adedapo Moses ] | [Frontend] |
+| [nancynkem199@gmail.com ] | [Frontend] |
+| [ajaegbustaley2@gmail.com] | [Backend] |
+| [orjimaryjullie@gmail.com] | [Backend] |
